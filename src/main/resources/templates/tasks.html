@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO</title>
+</head>
+<body>
+<p th:each="t : ${list}" th:if="${t != null}">
+    <span th:text="${t.id} + ': ' + ${t.date} + ' ' +
+               ${t.priority == 0 ? 'HIGH' : (t.priority == 1 ? 'MEDIUM' : 'LOW')} + ' ' +
+               ${t.description} + ' ' +
+               ${t.status == 0 ? 'NOT_STARTED' : (t.status == 1 ? 'IN_PROGRESS' : (t.status == 2 ? 'COMPLETE' : 'STUCK'))} + ' ' +
+               ${t.deadline}">list</span>
+    <a th:href="@{/delete(id=${t.id})}">D</a>
+</p>
+<form th:action="@{tasks}" th:object="${task}" method="post">
+    <label for="priority">priority</label>
+    <select name="priority" th:field="*{priority}" id="priority">
+        <option th:value=0>HIGH</option>
+        <option th:value=1>MEDIUM</option>
+        <option th:value=2>LOW</option>
+    </select>
+    <label for="description">description</label>
+    <input type="text" th:field="*{description}" id="description" placeholder="description">
+    <label for="status">status</label>
+    <select name="status" th:field="*{status}" id="status">
+        <option th:value=-1>STUCK</option>
+        <option th:value=0>NOT_STARTED</option>
+        <option th:value=1>IN_PROGRESS</option>
+        <option th:value=2>COMPLETE</option>
+    </select>
+    <label for="deadline">deadline</label>
+    <input type="datetime-local" th:field="*{deadline}" id="deadline" placeholder="deadline">
+    <input type="submit" value="CREATE"><br>
+    <a href="/sorpriority">priority</a><br>
+    <a href="/sortstatus">status</a><br>
+</form>
+<form th:action="@{update}" method="POST">
+    <input name="id" th:value="${task.id}" />
+
+    <label for="ustatus">Status</label>
+    <select name="status" th:value="${task.status}" id="ustatus">
+        <option value="-1">STUCK</option>
+        <option value="0">NOT_STARTED</option>
+        <option value="1">IN_PROGRESS</option>
+        <option value="2">COMPLETE</option>
+    </select>
+
+    <input type="submit" value="Update">
+</form>
+</body>
+</html>
